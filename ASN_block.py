@@ -36,7 +36,7 @@ def get_asn_ips(asn_numbers, output_file):
     print(f"Les IPs pour les ASN {', '.join(asn_numbers)} ont été enregistrées dans {output_file}.")
 
 # Ajouter manuellement les numéros ASN ici
-asn_numbers = ["63023", "13335", "21859", "62240", "14061", "40021", "136787", "40676"]
+asn_numbers = ["63023", "13335", "21859", "62240", "14061", "40021", "136787", "40676", "61272"]
 
 # Spécifier le nom du fichier de sortie
 output_file = "multi_asn_ips.conf"
