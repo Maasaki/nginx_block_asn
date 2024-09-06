@@ -2,6 +2,8 @@
 
 Ce projet contient une liste d'adresses IP associées à des fournisseurs de VPN, collectées à partir des ASN publics, afin de restreindre l'accès des utilisateurs de votre réseau qui tentent d'utiliser des VPN.
 
+Cette liste est produite grâce à un script python: ASN_pfsense.py, qui faire des requête sur api.hackertarget.com (limité à 50 requêtes par jours en gratuit) et obtient les Ips à partir des numéros d'ASN. Les ips sont regroupés au maximum dans le même réseau pour minimiser la taille du fichier (ce qui l'API de hackertarget ne fait malheureusement pas).
+
 ## URL du fichier d'adresses IP
 
 Les adresses IP à bloquer (celles des VPN) sont listées dans le fichier suivant :
