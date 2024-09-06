@@ -4,7 +4,7 @@ Ce projet contient une liste d'adresses IP associées à des fournisseurs de VPN
 
 ## URL du fichier d'adresses IP
 
-Les adresses IP à bloquer sont listées dans le fichier suivant :
+Les adresses IP à bloquer (celles des VPN) sont listées dans le fichier suivant :
 - [pfsense_vpn_ALL.txt](https://raw.githubusercontent.com/Maasaki/nginx_block_asn/main/ASN_VPN_pfSense/pfsense_vpn_ALL.txt)
 
 ## Utilisation avec pfSense
@@ -22,26 +22,26 @@ Les adresses IP à bloquer sont listées dans le fichier suivant :
      https://raw.githubusercontent.com/Maasaki/nginx_block_asn/main/ASN_VPN_pfSense/pfsense_vpn_ALL.txt
      ```
    - **Refresh Frequency** : Choisissez une fréquence de mise à jour (par exemple, toutes les 6 heures ou tous les jours).
-   - **Description** : Blocage des utilisateurs tentant d'accéder à des services via des VPN.
+   - **Description** : Blocage des adresses IP des fournisseurs VPN.
 
 5. Cliquez sur **Save** pour sauvegarder l'alias.
 
-### Étape 2 : Créer une règle de firewall pour bloquer les utilisateurs VPN
+### Étape 2 : Créer une règle de firewall pour bloquer les utilisateurs utilisant des VPN
 
 1. Allez dans **Firewall > Rules**.
-2. Sélectionnez l'interface sur laquelle vous voulez appliquer la règle (généralement **WAN** ou **LAN**).
+2. Sélectionnez l'interface sur laquelle vous voulez appliquer la règle (généralement **LAN**, car c'est à partir de là que les utilisateurs locaux accéderaient à Internet).
 3. Cliquez sur **Add** pour créer une nouvelle règle de firewall.
 4. Configurez la règle comme suit :
    - **Action** : Sélectionnez **Block**.
-   - **Interface** : Choisissez l'interface appropriée (WAN, LAN, etc.).
-   - **Source** : Vous pouvez sélectionner **Single host or alias** et choisir l'alias `VPN_Block` que vous avez créé à l'étape précédente. Vous pouvez également spécifier des plages d'IP manuellement, par exemple `10.15.20.0/22` ou toute autre plage pertinente.
-   - **Destination** : Laissez sur **Any** pour bloquer toutes les destinations.
+   - **Interface** : Choisissez l'interface appropriée (**LAN** pour bloquer les utilisateurs locaux).
+   - **Source** : Choisissez **Single host or alias** pour spécifier vos plages d'IP locales, comme `10.0.0.0/24`, `192.168.1.0/24`, ou toute autre plage IP locale que vous utilisez.
+   - **Destination** : Sélectionnez **Single host or alias**, puis choisissez l'alias `VPN_Block` que vous avez créé précédemment. Cela bloquera l'accès à ces adresses IP des VPN.
 
 5. Sauvegardez et appliquez les modifications.
 
 ### Étape 3 : Vérification et ajustement
 
-Une fois la règle appliquée, vous pouvez utiliser les outils de diagnostic de pfSense pour vérifier si les utilisateurs utilisant des VPN sont correctement bloqués :
+Une fois la règle appliquée, vous pouvez utiliser les outils de diagnostic de pfSense pour vérifier si les utilisateurs locaux sont correctement bloqués lorsqu'ils tentent d'accéder aux IP des VPN :
 - Accédez à **Diagnostics > Ping** pour tester des IP spécifiques.
 - Utilisez **Diagnostics > States** pour vérifier l'état des connexions bloquées.
 
