@@ -1,10 +1,10 @@
-# Blocage des VPN par ASN sur pfSense
+# Blocage des utilisateurs via des VPN sur pfSense
 
-Ce projet contient une liste d'adresses IP associées à des VPNs spécifiques, extraites des ASN publics, que vous pouvez utiliser pour bloquer l'accès à votre réseau via pfSense.
+Ce projet contient une liste d'adresses IP associées à des fournisseurs de VPN, collectées à partir des ASN publics, afin de restreindre l'accès des utilisateurs de votre réseau qui tentent d'utiliser des VPN.
 
 ## URL du fichier d'adresses IP
 
-Les adresses IP sont disponibles dans le fichier suivant :
+Les adresses IP à bloquer sont listées dans le fichier suivant :
 - [pfsense_vpn_ALL.txt](https://raw.githubusercontent.com/Maasaki/nginx_block_asn/main/ASN_VPN_pfSense/pfsense_vpn_ALL.txt)
 
 ## Utilisation avec pfSense
@@ -22,11 +22,11 @@ Les adresses IP sont disponibles dans le fichier suivant :
      https://raw.githubusercontent.com/Maasaki/nginx_block_asn/main/ASN_VPN_pfSense/pfsense_vpn_ALL.txt
      ```
    - **Refresh Frequency** : Choisissez une fréquence de mise à jour (par exemple, toutes les 6 heures ou tous les jours).
-   - **Description** : Blocage des adresses IP associées aux VPNs.
+   - **Description** : Blocage des utilisateurs tentant d'accéder à des services via des VPN.
 
 5. Cliquez sur **Save** pour sauvegarder l'alias.
 
-### Étape 2 : Créer une règle de firewall pour bloquer les IPs
+### Étape 2 : Créer une règle de firewall pour bloquer les utilisateurs VPN
 
 1. Allez dans **Firewall > Rules**.
 2. Sélectionnez l'interface sur laquelle vous voulez appliquer la règle (généralement **WAN** ou **LAN**).
@@ -34,17 +34,16 @@ Les adresses IP sont disponibles dans le fichier suivant :
 4. Configurez la règle comme suit :
    - **Action** : Sélectionnez **Block**.
    - **Interface** : Choisissez l'interface appropriée (WAN, LAN, etc.).
-   - **Source** : Sélectionnez **Single host or alias** et choisissez l'alias `VPN_Block` que vous avez créé à l'étape précédente.
+   - **Source** : Vous pouvez sélectionner **Single host or alias** et choisir l'alias `VPN_Block` que vous avez créé à l'étape précédente. Vous pouvez également spécifier des plages d'IP manuellement, par exemple `10.15.20.0/22` ou toute autre plage pertinente.
    - **Destination** : Laissez sur **Any** pour bloquer toutes les destinations.
 
 5. Sauvegardez et appliquez les modifications.
 
 ### Étape 3 : Vérification et ajustement
 
-Une fois la règle appliquée, vous pouvez utiliser les outils de diagnostic de pfSense pour vérifier si les adresses IP sont correctement bloquées :
+Une fois la règle appliquée, vous pouvez utiliser les outils de diagnostic de pfSense pour vérifier si les utilisateurs utilisant des VPN sont correctement bloqués :
 - Accédez à **Diagnostics > Ping** pour tester des IP spécifiques.
 - Utilisez **Diagnostics > States** pour vérifier l'état des connexions bloquées.
-
 
 ## Contributeurs
 
