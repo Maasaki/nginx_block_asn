@@ -2,9 +2,8 @@ import requests
 import re
 import os
 import json
+import ipaddress
 
-ipv4_regex = r"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,2})"
-ipv6_regex = r"([a-fA-F0-9:]+:+[a-fA-F0-9:]+/\d{1,3})"
 
 def get_asn_ip(asn_numbers):
     # Nom du dossier où stocker les fichiers
@@ -43,6 +42,11 @@ def get_asn_ip(asn_numbers):
                     cleaned_data = json.loads(response.text)
                     asn_num = cleaned_data['as_number']
                     ips = cleaned_data['prefixes']
+                    ips = [ipaddress.ip_network(ip) for ip in ips]
+                    ip4s = [ ip for ip in ips if ip.version == 4]
+                    ip6s = [ ip for ip in ips if ip.version == 6]
+                    ip4s = ipaddress.collapse_addresses(ip4s)
+                    ip6s = ipaddress.collapse_addresses(ip6s)
 
                     file.write(f"# ASN Number : {asn_num}\n")
                     all.write(f"# ASN Number : {asn_num}\n")
@@ -50,18 +54,16 @@ def get_asn_ip(asn_numbers):
                     file.write("# IPv4 addresses:\n")
                     all.write("# IPv4 addresses:\n")
 
-                    for ip in ips:
-                        if re.match(ipv4_regex, ip):
-                            file.write(f"{ip} ;\n")
-                            all.write(f"{ip} ;\n")
+                    for ip in ip4s:
+                        file.write(f"{ip} ;\n")
+                        all.write(f"{ip} ;\n")
 
                     file.write("# IPv6 addresses:\n")
                     all.write("# IPv6 addresses:\n")
 
-                    for ip in ips:
-                        if re.match(ipv6_regex, ip):
-                            file.write(f"{ip} ;\n")
-                            all.write(f"{ip} ;\n")
+                    for ip in ip6s:
+                        file.write(f"{ip} ;\n")
+                        all.write(f"{ip} ;\n")
 
                 else:
                     print(f"Erreur lors de la récupération des données pour l'ASN {asn_number.strip()}. Code de statut: {response.status_code}")
