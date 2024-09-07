@@ -18,7 +18,7 @@ def get_asn_ip(asn_numbers):
 
     # Vérifier si le fichier existe déjà, si oui, le supprimer
     if os.path.exists(output_file):
-        os.remove(output_file)
+        os.rename(output_file, output_file + ".old")
 
     with open(output_file, 'w') as all:
 
@@ -27,7 +27,7 @@ def get_asn_ip(asn_numbers):
 
             # Vérifier si le fichier existe déjà, si oui, le supprimer
             if os.path.exists(output_file):
-                os.remove(output_file)
+                os.rename(output_file, output_file + ".old")
 
             with open(output_file, 'w') as file:
                 # Construire l'URL pour chaque ASN avec `type=iplist`
